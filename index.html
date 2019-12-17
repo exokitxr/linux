@@ -580,7 +580,7 @@ const xtermPlaneMesh = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial
     THREE.LinearFilter // use mipmapping in webgl2
   ),
 }));
-xtermPlaneMesh.position.x = -1.5;
+// xtermPlaneMesh.position.x = -1.5;
 xtermPlaneMesh.position.y = 1;
 xtermPlaneMesh.quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI/4);
 xtermPlaneMesh.click = () => {
@@ -622,7 +622,6 @@ renderer.domElement.addEventListener('mousemove', e => {
     localRaycaster.setFromCamera(localVector2D.set(xFactor * 2 - 1, yFactor * 2 + 1), camera);
     const intersections = localRaycaster.intersectObjects([
       xtermPlaneMesh,
-      editorPlaneMesh,
     ]);
     if (intersections.length > 0) {
       const [intersection] = intersections;
