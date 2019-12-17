@@ -328,10 +328,7 @@ header > .login-form.phase-3 > .phaseless-content
     </style>
     <script src="three.js"></script>
     <script src="OrbitControls.js"></script>
-    <script src="Reflector.js"></script>
     <script src="dist/index.js"></script>
-    <script src="textor/dist/texteditor.js"></script>
-    <script src="textor/dist/javascript.js"></script>
   </head>
   <body>
     <div class=body>
@@ -389,7 +386,6 @@ import './HelioWebXRPolyfill.js';
 
 const peerPoseUpdateRate = 50;
 const walkSpeed = 0.0015;
-const floorPlane = new THREE.Plane().setFromNormalAndCoplanarPoint(new THREE.Vector3(0, 1, 0), new THREE.Vector3(0, 0, 0));
 
 const localVector = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();
@@ -572,16 +568,6 @@ term.open(terminalEl);
 vm.boot(term);
 // window.term = term;
 
-const editor = new Textor.TextEditor(document.getElementById("editor"));
-editor.addEventListener('textchanged', e => {
-  console.log('text changed', e);
-});
-editor.language = new Textor.JavaScriptLanguage();
-editor.theme = editor.themeManager.get("dark");
-// editor.focus();
-// editor.text = document.querySelector("#data").textContent;
-// window.editor = editor;
-
 const xtermTextLayerEl = document.querySelector('.xterm-text-layer');
 const planeGeometry = new THREE.PlaneBufferGeometry(2, 1);
 const xtermPlaneMesh = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({
@@ -607,30 +593,9 @@ xtermPlaneMesh.click = () => {
 };
 scene.add(xtermPlaneMesh);
 
-const editorEl = document.getElementById('editor');
-const editorPlaneMesh = new THREE.Mesh(planeGeometry, new THREE.MeshBasicMaterial({
-  map: new THREE.Texture(
-    editorEl,
-    THREE.UVMapping,
-    THREE.ClampToEdgeWrapping,
-    THREE.ClampToEdgeWrapping,
-    THREE.LinearFilter,
-    THREE.LinearFilter // use mipmapping in webgl2
-  ),
-}));
-editorPlaneMesh.position.x = 1.5;
-editorPlaneMesh.position.y = 1;
-editorPlaneMesh.quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI/4);
-editorPlaneMesh.click = () => {
-  // console.log('click 2');
-  editor.focus();
-};
-scene.add(editorPlaneMesh);
-
 function animate() {
   // console.log('needs update', xtermPlaneMesh.material.map.image);
   xtermPlaneMesh.material.map.needsUpdate = true;
-  editorPlaneMesh.material.map.needsUpdate = true;
 
   renderer.render(scene, camera);
 }
